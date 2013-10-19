@@ -44,7 +44,10 @@ wss.on('connection', function(ws) {
     ws.on('close', function() {
       console.log('websocket connection close');
       for (i in clients) {
-        console.log(clients[i] == ws);
+        if (clients[i] == ws) {
+          clients.splice(i, 1);
+          return ;
+        }
       }
     });
 });
