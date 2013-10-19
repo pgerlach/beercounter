@@ -36,19 +36,18 @@ var clients = [];
 
 wss.on('connection', function(ws) {
 
+  console.log(ws);
     clients.push(ws);
 
     console.log('websocket connection open');
 
     ws.on('close', function() {
-      console.log('websocket connection close');
-      clearInterval(id);
+        console.log('websocket connection close');
+        clearInterval(id);
       for (i in clients) {
         console.log(clients[i] == ws);
       }
-    }
-
-        // clients = [];
+    });
 });
 
 app.get("/newbeer", function(req, resp) {
