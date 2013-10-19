@@ -2,7 +2,7 @@ var WebSocketServer = require('ws').Server
   , http = require('http')
   , express = require('express')
   , app = express()
-  , port = process.env.PORT || 5000,
+  , port = process.env.PORT || 5000
   , mongoose = require("mongoose");
 
 app.use(express.static(__dirname + '/'));
@@ -12,11 +12,12 @@ server.listen(port);
 
 console.log('http server listening on %d', port);
 
-mongoose.connect(process.env.MONGOHQ_URL, function (err, res) {
+var mongourl = process.env.MONGOHQ_URL;
+mongoose.connect(mongourl, function (err, res) {
   if (err) { 
-    console.log ('ERROR connecting to: ' + uristring + '. ' + err);
+    console.log ('ERROR connecting to: ' + mongourl + '. ' + err);
   } else {
-    console.log ('Succeeded connected to: ' + uristring);
+    console.log ('Succeeded connected to: ' + mongourl);
   }
 });
 
