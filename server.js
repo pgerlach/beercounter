@@ -36,34 +36,39 @@ var clients = [];
 
 wss.on('connection', function(ws) {
 
-  console.log(ws);
     clients.push(ws);
 
     console.log('websocket connection open');
 
     ws.on('close', function() {
-        console.log('websocket connection close');
-        clearInterval(id);
-        // TODO remove from clients
-    });
+      console.log('websocket connection close');
+      clearInterval(id);
+      for (i in clients) {
+        console.log(clients[i] == ws);
+      }
+    }
+
+        // clients = [];
 });
 
 app.get("/newbeer", function(req, resp) {
+
   console.log("one new beer !");
+
   var newBeer = new Beer({ date: new Date()});
-  newBeer.save(function (err) {if (err) console.log ('Error on save!')});
+  newBeer.save(function (err) {
+    if (err) console.log ('Error on save!')
+  });
   Beer.count(function(err, count) {
     if (err) {
       console.log ('Error on count!');
       return ;
     }
     console.log("count from db: ", count);
+    for (i in clients) {
+      ws = clients[i];
+      ws.send(JSON.stringify(count+1), function() {  });
+    }
   });
-  beercount++;
-  for (i in clients) {
-    ws = clients[i];
-    console.log(ws);
-    ws.send(JSON.stringify(beercount), function() {  });
-  }
   resp.send("" + beercount);
 });
