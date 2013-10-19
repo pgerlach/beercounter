@@ -18,7 +18,7 @@
     </style>
 
     <script>
-      var host = location.origin.replace(/^http/, 'ws')
+      var host = location.origin.replace(/^http/, 'wss')
       var ws = new WebSocket(host);
       ws.onmessage = function (event) {
         document.querySelector('#count').innerHTML = JSON.stringify(event.data);
