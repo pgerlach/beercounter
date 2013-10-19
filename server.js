@@ -2,7 +2,8 @@ var WebSocketServer = require('ws').Server
   , http = require('http')
   , express = require('express')
   , app = express()
-  , port = process.env.PORT || 5000;
+  , port = process.env.PORT || 5000,
+  , mongoose = require("mongoose");
 
 app.use(express.static(__dirname + '/'));
 
@@ -10,6 +11,20 @@ var server = http.createServer(app);
 server.listen(port);
 
 console.log('http server listening on %d', port);
+
+mongoose.connect(process.env.MONGOHQ_URL, function (err, res) {
+  if (err) { 
+    console.log ('ERROR connecting to: ' + uristring + '. ' + err);
+  } else {
+    console.log ('Succeeded connected to: ' + uristring);
+  }
+});
+
+var beerSchema = new mongoose.Schema({
+  date: Date
+});
+var Beer = mongoose.model('beers', beerSchema);
+
 
 var beercount = 0;
 
@@ -23,10 +38,6 @@ wss.on('connection', function(ws) {
   console.log(ws);
     clients.push(ws);
 
-    // var id = setInterval(function() {
-    //     ws.send(JSON.stringify(new Date()), function() {  });
-    // }, 1000);
-
     console.log('websocket connection open');
 
     ws.on('close', function() {
@@ -37,6 +48,16 @@ wss.on('connection', function(ws) {
 });
 
 app.get("/newbeer", function(req, resp) {
+  console.log("one new beer !");
+  var newBeer = new Beer({ date: new Date()});
+  newBeer.save(function (err) {if (err) console.log ('Error on save!')});
+  Beer.count(function(err, count) {
+    if (err) {
+      console.log ('Error on count!');
+      return ;
+    }
+    console.log("count from db: ", count);
+  });
   beercount++;
   for (i in clients) {
     ws = clients[i];
