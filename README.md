@@ -1,19 +1,9 @@
-# Node.js Websocket Test
+# Beer counter
 
-A tiny demo using the [einaros/ws](http://einaros.github.io/ws/) WebSockets implementation.
+two routes :
+ - '/' (GET) : show the number of beers
+ - '/newbeer' (GET) : to be called when a beer is opened
 
-# Running Locally
-
-``` bash
-npm install
-foreman start
-```
-
-# Running on Heroku
-
-``` bash
-heroku create
-heroku labs:enable websockets
-git push heroku master
-heroku open
-```
+# Running on heroku
+ - need addon mongohq, providing MONGOHQ_URL env var
+ - need to enable websockets on Heroku : "heroku labs:enable websockets"
