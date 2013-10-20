@@ -37,9 +37,17 @@ var clients = [];
 wss.on('connection', function(ws) {
 
   console.log(ws);
-    clients.push(ws);
+  clients.push(ws);
 
-    console.log('websocket connection open');
+  console.log('websocket connection open');
+
+  Beer.count(function(err, count) {
+    if (err) {
+      console.log ('Error on count!');
+      return ;
+    }
+    ws.send(JSON.stringify(count), function() {  });
+  }
 
     ws.on('close', function() {
       console.log('websocket connection close');
