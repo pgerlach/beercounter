@@ -47,7 +47,7 @@ wss.on('connection', function(ws) {
       return ;
     }
     ws.send(JSON.stringify(count), function() {  });
-  }
+  });
 
     ws.on('close', function() {
       console.log('websocket connection close');
